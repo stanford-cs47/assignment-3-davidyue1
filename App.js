@@ -8,7 +8,7 @@
 */
 
 import React from 'react';
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native';
 import { Images, Colors } from './App/Themes'
 import APIRequest from './App/Config/APIRequest'
 
@@ -27,7 +27,7 @@ export default class App extends React.Component {
   componentDidMount() {
 
     //uncomment this to run an API query!
-    //this.loadArticles();
+    this.loadArticles();
   }
 
   async loadArticles(searchTerm = '', category = '') {
@@ -38,8 +38,9 @@ export default class App extends React.Component {
     } else {
       resultArticles = await APIRequest.requestCategoryPosts(category);
     }
-    console.log(resultArticles);
+    //console.log(resultArticles);
     this.setState({loading: false, articles: resultArticles})
+    //console.log(this.state.articles)
   }
 
   render() {
@@ -48,13 +49,15 @@ export default class App extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
 
-        <Text style={{textAlign: 'center'}}>Have fun! :) {"\n"} Start by changing the API Key in "./App/Config/AppConfig.js" {"\n"} Then, take a look at the following components: {"\n"} NavigationButtons {"\n"} Search {"\n"} News {"\n"} 🔥</Text>
+        <Image 
+          style={styles.logo}
+          source={ require('./App/Images/nyt.png') } 
+        />
 
-        {/*First, you'll need a logo*/}
-
-        {/*Then your search bar*/}
-
+        <Search/>
         {/*And some news*/}
+
+        <News articles={this.state.articles}/>
 
         {/*Though, you can style and organize these however you want! power to you 😎*/}
 
@@ -67,9 +70,18 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    //flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'column',
+    width: '100%',
+    height: '100%',
+
+  },
+  logo : {
+    width: '100%',
+    height: '13%',
+    resizeMode: 'contain',
+  },
 });
